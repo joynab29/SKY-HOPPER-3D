@@ -584,14 +584,36 @@ def draw_coin(c):
 
     glPopMatrix()
 
-
+gem_quadric = None
 def draw_gem(g):
+    global gem_quadric
+    if gem_quadric is None:
+        gem_quadric = gluNewQuadric()
+        gluQuadricNormals(gem_quadric, GLU_SMOOTH)
+
     glPushMatrix()
     glTranslatef(g["x"], g["y"], g["z"])
+
     glColor3f(0.20, 0.90, 1.00)
-    glScalef(18, 18, 26)
-    glutSolidOctahedron()
+
+    radius = 10.0
+    height = 28.0
+    tip_h = 12.0
+
+    gluCylinder(gem_quadric, radius, radius, height, 24, 6)
+
+    glPushMatrix()
+    glTranslatef(0, 0, height)
+    gluCylinder(gem_quadric, radius, 0.0, tip_h, 24, 6)
     glPopMatrix()
+
+    glPushMatrix()
+    glRotatef(180, 1, 0, 0)
+    gluCylinder(gem_quadric, radius, 0.0, tip_h * 0.75, 24, 6)
+    glPopMatrix()
+
+    glPopMatrix()   
+
 
 
 def draw_collectibles():
